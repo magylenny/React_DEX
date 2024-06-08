@@ -8,6 +8,8 @@ import {
 import tokenList from "../tokenList.json";
 import axios from "axios";
 
+const API_URL = "https://dex-back-dm91p29hp-magylennys-projects.vercel.app/tokenPrice";
+
 function Swap() {
   const [slippage, setSlippage] = useState(2, 5);
   const [tokenOne, setTokenOne] = useState(tokenList[0]);
@@ -68,7 +70,7 @@ function Swap() {
   };
 
   const fetchPrices = async (one, two) => {
-    const response = await axios.get(`http://localhost:3001/tokenPrice`, {
+    const response = await axios.get(API_URL, {
       params: {
         addressOne: one,
         addressTwo: two,
