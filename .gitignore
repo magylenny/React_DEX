@@ -1,0 +1,4 @@
+dex/node_modules
+dex/build
+dexBack/node_modules
+dexBack/.env
