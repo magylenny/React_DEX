@@ -5,8 +5,11 @@ const cors = require("cors");
 require("dotenv").config();
 const port = 3001;
 
-app.use(cors());
+app.use(cors({ origin: '*',
+  optionsSuccessStatus: 200}));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 app.get("/tokenPrice", async (req, res) => {
   const { query } = req;
