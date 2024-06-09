@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.4716e02e.css",
-    "main.js": "/static/js/main.9b982d19.js",
-    "static/media/moralis-logo.svg": "/static/media/moralis-logo.aa658eaa416895465a8fcf129380ab15.svg",
-    "index.html": "/index.html",
-    "static/media/eth.svg": "/static/media/eth.df265e367364f285053a1285ad8d418d.svg",
-    "main.4716e02e.css.map": "/static/css/main.4716e02e.css.map",
-    "main.9b982d19.js.map": "/static/js/main.9b982d19.js.map"
+    "main.css": "/React_DEX/static/css/main.4716e02e.css",
+    "main.js": "/React_DEX/static/js/main.d3349d96.js",
+    "static/media/moralis-logo.svg": "/React_DEX/static/media/moralis-logo.aa658eaa416895465a8fcf129380ab15.svg",
+    "index.html": "/React_DEX/index.html",
+    "static/media/eth.svg": "/React_DEX/static/media/eth.df265e367364f285053a1285ad8d418d.svg",
+    "main.4716e02e.css.map": "/React_DEX/static/css/main.4716e02e.css.map",
+    "main.d3349d96.js.map": "/React_DEX/static/js/main.d3349d96.js.map"
   },
   "entrypoints": [
     "static/css/main.4716e02e.css",
-    "static/js/main.9b982d19.js"
+    "static/js/main.d3349d96.js"
   ]
 }
