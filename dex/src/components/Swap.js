@@ -7,10 +7,13 @@ import {
 } from "@ant-design/icons";
 import tokenList from "../tokenList.json";
 import axios from "axios";
+import { useSendTransaction, useWaitForTransaction } from "wagmi";
 
-const API_URL = "https://dex-back-dm91p29hp-magylennys-projects.vercel.app/tokenPrice";
+const API_URL = "https://dex-back-f2prdw7wo-magylennys-projects.vercel.app";
 
-function Swap() {
+function Swap(props) {
+  const { address, isConnected } = props;
+  const [messageApi, contextHolder] = message.useMessage();
   const [slippage, setSlippage] = useState(2, 5);
   const [tokenOne, setTokenOne] = useState(tokenList[0]);
   const [tokenTwo, setTokenTwo] = useState(tokenList[1]);
@@ -20,9 +23,111 @@ function Swap() {
   const [changeToken, setChangeToken] = useState(1);
   const [prices, setPrices] = useState(null);
 
+  const [txDetails, setTxDetails] = useState({
+    to: null,
+    data: null,
+    value: null,
+  });
+
+  const { data, sendTransaction } = useSendTransaction({
+    request: {
+      from: address,
+      to: String(txDetails.to),
+      data: String(txDetails.data),
+      value: String(txDetails.value),
+    },
+  });
+
+  /*const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data.hash,
+  });*/
   useEffect(() => {
     fetchPrices(tokenList[0].address, tokenList[1].address);
   }, []);
+
+  useEffect(() => {
+    if (txDetails.to && isConnected) {
+      sendTransaction();
+    }
+  }, [txDetails]);
+
+  /*useEffect(() => {
+    messageApi.destroy();
+
+    if(isLoading){
+      messageApi.open({
+        type:'loading',
+        content: 'Transactions is pending...',
+        duration: 0
+      })
+    }
+  }, [isLoading])*/
+
+  /*useEffect(() =>{
+    messageApi.destroy();
+    if(isSuccess){
+      messageApi.open({
+        type: 'success',
+        content: 'Transaction succesful',
+        duration: 1.550
+      })
+    }
+    else if(txDetails.to){
+      messageApi.open({
+        type:'error',
+        content: 'Transaction failed',
+        duration: 1.50
+      })
+    }
+  }, [isSuccess])*/
+
+  const approve = async () => {
+    setTimeout(async () => {
+      const approve = await axios.get(API_URL + "/approve", {
+        params: {
+          tokenAddress: tokenOne.address,
+        },
+      });
+
+      setTxDetails(approve.data);
+      console.log("not approved");
+      return;
+    }, 1500);
+  };
+
+  const swap = async () => {
+    setTimeout(async () => {
+      const tx = await axios.get(API_URL + "/swap", {
+        params: {
+          fromTokenAddress: tokenOne.address,
+          toTokenAddress: tokenTwo.address,
+          amount: tokenOneAmount.padEnd(
+            tokenOne.decimals + tokenOneAmount.length,
+            "0"
+          ),
+          fromAddress: address,
+          slippage: slippage,
+        },
+      });
+
+      let decimals = Number(`1E${tokenTwo.decimals}`);
+      setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
+      setTxDetails(tx.data.tx);
+    }, 1500);
+  };
+
+  async function fetchDexSwap() {
+    const allowance = await axios.get(API_URL + "/allowance", {
+      params: {
+        tokenAddress: tokenOne.address,
+        walletAddress: address,
+      },
+    });
+    if (allowance.data.allowance === "0") {
+      await approve();
+    }
+    await swap();
+  }
 
   const changeAmount = (e) => {
     setTokenOneAmount(e.target.value);
@@ -70,7 +175,7 @@ function Swap() {
   };
 
   const fetchPrices = async (one, two) => {
-    const response = await axios.get(API_URL, {
+    const response = await axios.get(API_URL + "/tokenPrice", {
       params: {
         addressOne: one,
         addressTwo: two,
@@ -94,6 +199,7 @@ function Swap() {
   );
   return (
     <>
+      {contextHolder}
       <Modal
         open={isOpen}
         footer={null}
@@ -152,7 +258,11 @@ function Swap() {
             <DownOutlined />
           </div>
         </div>
-        <div className="swapButton" disabled={!tokenOneAmount}>
+        <div
+          className="swapButton"
+          disabled={!tokenOneAmount || !isConnected}
+          onClick={fetchDexSwap}
+        >
           Swap
         </div>
       </div>
