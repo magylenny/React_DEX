@@ -9,7 +9,7 @@ function Header(props) {
     <header>
       <div className="leftH">
         <img src={Logo} alt="logo" className="logo" />
-        <Link to="/" className="link">
+        <Link to="/React_DEX" className="link">
           <div className="headerItem">Swap</div>
         </Link>
         <Link to="/tokens" className="link">
