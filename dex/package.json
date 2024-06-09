@@ -2,7 +2,7 @@
   "name": "dex",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://magylenny.github.io/React_DEX",
+  "homepage": "https://magylenny.github.io/",
   "dependencies": {
     "@ant-design/icons": "^5.0.0",
     "@testing-library/jest-dom": "^5.16.5",
